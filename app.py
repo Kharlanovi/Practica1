@@ -110,6 +110,10 @@ def get_products():
 
 @app.route('/api/cart/add', methods=['POST'])
 def add_to_cart():
+
+    if 'user_id' not in session:
+        return jsonify({'error': 'Вы не можете добавлять товары в корзину. Пожалуйста, войдите в систему.'}), 401
+    
     try:
         data = request.get_json()
         product_id = str(data.get('product_id'))
@@ -150,6 +154,7 @@ def add_to_cart():
 
 @app.route('/api/cart')
 def get_cart():
+ 
     cart = session.get('cart', {})
     cart_items = []
     total = 0
@@ -170,11 +175,16 @@ def get_cart():
     return jsonify({
         'items': cart_items,
         'total': total,
-        'count': len(cart_items)
+        'count': len(cart_items),
+        'is_authenticated': 'user_id' in session  
     })
 
 @app.route('/api/cart/update/<item_id>', methods=['PUT'])
 def update_cart_item(item_id):
+
+    if 'user_id' not in session:
+        return jsonify({'error': 'Вы не можете изменять корзину. Пожалуйста, войдите в систему.'}), 401
+    
     data = request.get_json()
     quantity = data.get('quantity', 1)
     
@@ -195,6 +205,10 @@ def update_cart_item(item_id):
 
 @app.route('/api/cart/remove/<item_id>', methods=['DELETE'])
 def remove_from_cart(item_id):
+
+    if 'user_id' not in session:
+        return jsonify({'error': 'Вы не можете изменять корзину. Пожалуйста, войдите в систему.'}), 401
+    
     cart = session['cart']
     
     if item_id not in cart:
@@ -208,10 +222,19 @@ def remove_from_cart(item_id):
 
 @app.route('/api/cart/clear', methods=['DELETE'])
 def clear_cart():
+
+    if 'user_id' not in session:
+        return jsonify({'error': 'Вы не можете очищать корзину. Пожалуйста, войдите в систему.'}), 401
+    
     session['cart'] = {}
     session.modified = True
     
     return jsonify({'message': 'Cart cleared'})
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
 
 @app.route('/admin')
 def admin_panel():
