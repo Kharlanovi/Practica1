@@ -43,11 +43,17 @@
                             <a class="nav-link {% if request.path == '/register' %}active{% endif %}"
                                 href="{{ url_for('register_page') }}">Регистрация</a>
                         </li>
-                         {% if session.get("role") == "admin" %}
-                        <li class="nav-item">
-                             <a class="nav-link" href="{{ url_for('admin_panel') }}">Админ</a>
+                        <li class="nav-user-item">
+                            <a href="{{ url_for('logout') }}" class="nav-link logout-btn">
+                                <span class="user-name">{{ session.username }}</span>
+                                Выйти
+                            </a>
                         </li>
-                    {% endif %}
+                        {% if session.get("role") == "admin" %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin_panel') }}">Админ</a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -72,18 +78,18 @@
             <div class="col mb-3">
                 <h5>Информация</h5>
                 <ul class="nav flex-column">
-           <li class="nav-item mb-2">
-                <a href="{{ url_for('index') }}" class="nav-link p-0 text-body-secondary">Главная</a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="{{ url_for('catalog') }}" class="nav-link p-0 text-body-secondary">Каталог</a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="{{ url_for('about') }}" class="nav-link p-0 text-body-secondary">О нас</a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="{{ url_for('cart_page') }}" class="nav-link p-0 text-body-secondary">Корзина</a>
-            </li>
+                    <li class="nav-item mb-2">
+                        <a href="{{ url_for('index') }}" class="nav-link p-0 text-body-secondary">Главная</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="{{ url_for('catalog') }}" class="nav-link p-0 text-body-secondary">Каталог</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="{{ url_for('about') }}" class="nav-link p-0 text-body-secondary">О нас</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="{{ url_for('cart_page') }}" class="nav-link p-0 text-body-secondary">Корзина</a>
+                    </li>
                 </ul>
             </div>
             <div class="col mb-3">
@@ -110,4 +116,4 @@
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 </body>
 
-</html> 
+</html>
